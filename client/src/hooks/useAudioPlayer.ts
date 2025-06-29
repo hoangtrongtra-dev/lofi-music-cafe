@@ -44,7 +44,7 @@ export const useAudioPlayer = () => {
     };
   }, [playerState.isPlaying, updateTime]);
 
-  const loadTrack = useCallback((track: Track, playlist: Track[] = [], index: number = 0) => {
+  const loadTrack = useCallback((track: Track, playlist: Track[] = [], index: number = 0, autoPlay: boolean = false) => {
     if (howlRef.current) {
       howlRef.current.unload();
     }
@@ -74,7 +74,8 @@ export const useAudioPlayer = () => {
       onend: () => {
         handleTrackEnd();
       },
-      onerror: (id, error) => {
+      // @ts-ignore
+      onerror: (id: any, error: any) => {
         console.error('Howler error:', error);
         setPlayerState(prev => ({
           ...prev,
@@ -92,6 +93,9 @@ export const useAudioPlayer = () => {
       currentPlaylist: playlist.length > 0 ? playlist : prev.currentPlaylist,
       currentIndex: index >= 0 ? index : prev.currentIndex
     }));
+    if (autoPlay) {
+      howl.play();
+    }
   }, [playerState.volume, playerState.isMuted]);
 
   const handleTrackEnd = useCallback(() => {
@@ -208,7 +212,7 @@ export const useAudioPlayer = () => {
 
     const nextTrack = playerState.currentPlaylist[nextIndex];
     if (nextTrack) {
-      loadTrack(nextTrack, playerState.currentPlaylist, nextIndex);
+      loadTrack(nextTrack, playerState.currentPlaylist, nextIndex, true);
     }
   }, [playerState.currentPlaylist, playerState.currentIndex, playerState.isShuffled, loadTrack]);
 
@@ -226,7 +230,7 @@ export const useAudioPlayer = () => {
 
     const prevTrack = playerState.currentPlaylist[prevIndex];
     if (prevTrack) {
-      loadTrack(prevTrack, playerState.currentPlaylist, prevIndex);
+      loadTrack(prevTrack, playerState.currentPlaylist, prevIndex, true);
     }
   }, [playerState.currentPlaylist, playerState.currentIndex, playerState.isShuffled, loadTrack]);
 

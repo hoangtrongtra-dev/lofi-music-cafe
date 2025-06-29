@@ -26,26 +26,26 @@ const MoodSelector: React.FC<MoodSelectorProps> = ({ onMoodSelect, currentMood }
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-full transition-all duration-200"
+        className="flex items-center gap-2 px-4 py-2 bg-indigo-900/80 border border-indigo-300/40 rounded-full transition-all duration-200 shadow hover:bg-indigo-800/90 text-indigo-100 font-bold"
       >
         {selectedMood ? (
           <>
             <selectedMood.icon className="w-4 h-4" style={{ color: selectedMood.color }} />
-            <span className="text-white text-sm">{selectedMood.name}</span>
+            <span className="text-indigo-100 text-sm font-bold">{selectedMood.name}</span>
           </>
         ) : (
           <>
-            <Brain className="w-4 h-4 text-white/70" />
-            <span className="text-white/70 text-sm">Select Mood</span>
+            <Brain className="w-4 h-4 text-indigo-400" />
+            <span className="text-indigo-200 text-sm font-bold">Select Mood</span>
           </>
         )}
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-80 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl z-50">
-          <div className="p-4">
-            <h3 className="text-white font-semibold mb-3">How are you feeling?</h3>
-            <div className="grid grid-cols-2 gap-2">
+        <div className="absolute bottom-full left-0 mb-2 min-w-[22rem] max-w-md w-full bg-gradient-to-br from-indigo-900/90 to-indigo-700/90 border border-indigo-300/40 rounded-2xl shadow-2xl z-50">
+          <div className="p-4 max-h-80 overflow-y-auto">
+            <h3 className="text-indigo-100 font-bold mb-3">How are you feeling?</h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
               {moods.map((mood) => (
                 <button
                   key={mood.id}
@@ -53,17 +53,17 @@ const MoodSelector: React.FC<MoodSelectorProps> = ({ onMoodSelect, currentMood }
                     onMoodSelect(mood.id);
                     setIsOpen(false);
                   }}
-                  className={`p-3 rounded-xl transition-all duration-200 text-left ${
+                  className={`p-3 rounded-xl transition-all duration-200 text-left border font-bold shadow-sm ${
                     currentMood === mood.id
-                      ? 'bg-white/30 border border-white/40'
-                      : 'bg-white/10 hover:bg-white/20 border border-transparent'
+                      ? 'bg-indigo-700/60 border-indigo-400 text-indigo-100'
+                      : 'bg-indigo-900/30 hover:bg-indigo-700/40 border-indigo-300/40 text-indigo-100'
                   }`}
                 >
                   <div className="flex items-center gap-2 mb-1">
-                    <mood.icon className="w-4 h-4" style={{ color: mood.color }} />
-                    <span className="text-white text-sm font-medium">{mood.name}</span>
+                    <mood.icon className="w-4 h-4" style={{ color: mood.color, filter: 'brightness(0.9)' }} />
+                    <span className="text-indigo-100 text-sm font-bold">{mood.name}</span>
                   </div>
-                  <p className="text-white/70 text-xs">{mood.description}</p>
+                  <p className="text-indigo-200 text-xs">{mood.description}</p>
                 </button>
               ))}
             </div>

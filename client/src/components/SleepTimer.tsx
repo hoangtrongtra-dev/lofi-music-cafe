@@ -76,14 +76,14 @@ const SleepTimer: React.FC<SleepTimerProps> = ({ onTimerEnd }) => {
       )}
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-2 w-64 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl z-50">
-          <div className="p-4">
-            <h3 className="text-white font-semibold mb-4">Sleep Timer</h3>
+        <div className="absolute bottom-full right-0 mb-2 min-w-[18rem] max-w-xs md:max-w-sm bg-gradient-to-br from-indigo-900/90 to-indigo-700/90 border border-indigo-300/40 rounded-2xl shadow-2xl z-50 max-h-96 overflow-y-auto">
+          <div className="p-6">
+            <h3 className="text-indigo-100 font-bold mb-4 text-lg">Sleep Timer</h3>
             
             {!isActive ? (
               <>
                 <div className="mb-4">
-                  <label className="block text-white/80 text-sm mb-2">Duration (minutes)</label>
+                  <label className="block text-indigo-200 text-sm font-semibold mb-2">Duration (minutes)</label>
                   <input
                     type="range"
                     min="5"
@@ -91,9 +91,9 @@ const SleepTimer: React.FC<SleepTimerProps> = ({ onTimerEnd }) => {
                     step="5"
                     value={duration}
                     onChange={(e) => setDuration(parseInt(e.target.value))}
-                    className="w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer slider"
+                    className="w-full h-3 bg-indigo-400/40 rounded-lg appearance-none cursor-pointer slider accent-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-400"
                   />
-                  <div className="text-center text-white mt-2">{duration} minutes</div>
+                  <div className="text-center text-indigo-100 mt-2 font-semibold">{duration} minutes</div>
                 </div>
 
                 <div className="grid grid-cols-3 gap-2 mb-4">
@@ -101,10 +101,10 @@ const SleepTimer: React.FC<SleepTimerProps> = ({ onTimerEnd }) => {
                     <button
                       key={preset}
                       onClick={() => setDuration(preset)}
-                      className={`py-2 px-3 rounded-lg text-sm transition-colors ${
+                      className={`py-2 px-3 rounded-lg text-sm transition-colors font-semibold shadow-sm border border-transparent ${
                         duration === preset
-                          ? 'bg-indigo-600 text-white'
-                          : 'bg-white/10 hover:bg-white/20 text-white/80'
+                          ? 'bg-indigo-500 text-white'
+                          : 'bg-indigo-900/30 hover:bg-indigo-700/40 text-indigo-100'
                       }`}
                     >
                       {preset}m
@@ -114,7 +114,7 @@ const SleepTimer: React.FC<SleepTimerProps> = ({ onTimerEnd }) => {
 
                 <button
                   onClick={startTimer}
-                  className="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-semibold transition-colors flex items-center justify-center gap-2 shadow-md"
                 >
                   <Play className="w-4 h-4" />
                   Start Timer
@@ -129,14 +129,14 @@ const SleepTimer: React.FC<SleepTimerProps> = ({ onTimerEnd }) => {
                 <div className="flex gap-2">
                   <button
                     onClick={() => setIsActive(!isActive)}
-                    className="flex-1 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                    className="flex-1 py-2 bg-indigo-900/30 hover:bg-indigo-700/40 text-indigo-100 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2 shadow"
                   >
                     {isActive ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                     {isActive ? 'Pause' : 'Resume'}
                   </button>
                   <button
                     onClick={stopTimer}
-                    className="flex-1 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                    className="flex-1 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition-colors flex items-center justify-center gap-2 shadow"
                   >
                     <RotateCcw className="w-4 h-4" />
                     Stop
