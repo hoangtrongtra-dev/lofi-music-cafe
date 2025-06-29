@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
-import { Coffee, Heart, Search, Menu, X } from 'lucide-react';
+import { Coffee, Heart, Search, Menu, X, Cloud, User, LogOut } from 'lucide-react';
+import { AuthUser } from '../types/User';
+import { useAuth } from '../contexts/AuthContext';
 
 interface HeaderProps {
   currentPage: string;
   onPageChange: (page: string) => void;
   onAuthClick: () => void;
+  user: AuthUser | null;
+  isAuthenticated: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ currentPage, onPageChange, onAuthClick }) => {
+const Header: React.FC<HeaderProps> = ({ currentPage, onPageChange, onAuthClick, user, isAuthenticated }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const { logout } = useAuth();
 
   const navigation = [
     { name: 'Home', key: 'home' },
@@ -20,6 +26,11 @@ const Header: React.FC<HeaderProps> = ({ currentPage, onPageChange, onAuthClick 
   const handleNavClick = (page: string) => {
     onPageChange(page);
     setIsMobileMenuOpen(false);
+  };
+
+  const handleLogout = () => {
+    logout();
+    setShowUserMenu(false);
   };
 
   return (
@@ -79,12 +90,51 @@ const Header: React.FC<HeaderProps> = ({ currentPage, onPageChange, onAuthClick 
             >
               <Heart className="w-5 h-5 text-white" />
             </button>
-            <button 
-              onClick={onAuthClick}
-              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full font-medium transition-colors shadow-lg"
-            >
-              Sign In
-            </button>
+            
+            {isAuthenticated ? (
+              <div className="relative">
+                <button
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  className="flex items-center space-x-2 p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+                >
+                  {user?.avatar ? (
+                    <img
+                      src={user.avatar}
+                      alt={user.username}
+                      className="w-8 h-8 rounded-full"
+                    />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                      <User className="w-4 h-4 text-white" />
+                    </div>
+                  )}
+                </button>
+                
+                {showUserMenu && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2">
+                    <div className="px-4 py-2 border-b border-gray-100">
+                      <p className="text-sm font-medium text-gray-900">{user?.username}</p>
+                      <p className="text-xs text-gray-500">{user?.email}</p>
+                      <p className="text-xs text-blue-600 font-medium">{user?.role}</p>
+                    </div>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                    >
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button 
+                onClick={onAuthClick}
+                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full font-medium transition-colors shadow-lg"
+              >
+                Sign In
+              </button>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -141,14 +191,42 @@ const Header: React.FC<HeaderProps> = ({ currentPage, onPageChange, onAuthClick 
                   Favorites
                 </button>
               </div>
-              <div className="px-4 py-2">
-                <button 
+              {isAuthenticated ? (
+                <div className="px-4 py-2 border-t border-white/20">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      {user?.avatar ? (
+                        <img
+                          src={user.avatar}
+                          alt={user.username}
+                          className="w-8 h-8 rounded-full"
+                        />
+                      ) : (
+                        <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                          <User className="w-4 h-4 text-white" />
+                        </div>
+                      )}
+                      <div>
+                        <p className="text-sm font-medium text-white">{user?.username}</p>
+                        <p className="text-xs text-white/70">{user?.role}</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={handleLogout}
+                      className="p-2 text-white/70 hover:text-white transition-colors"
+                    >
+                      <LogOut className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <button
                   onClick={onAuthClick}
                   className="w-full px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors"
                 >
                   Sign In
                 </button>
-              </div>
+              )}
             </div>
           </div>
         )}

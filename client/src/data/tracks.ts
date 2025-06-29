@@ -7,7 +7,7 @@ export const tracks: Track[] = [
     artist: 'Chillhop Collective',
     album: 'Night Vibes',
     duration: 180,
-    src: 'https://www.soundjay.com/misc/sounds-misc/bell-ringing-05.mp3',
+    src: 'https://res.cloudinary.com/dxxzqzq0z/lofi-cafe/demo/audio/j8h9rcsejawrjemr3b14',
     cover: 'https://images.pexels.com/photos/1694621/pexels-photo-1694621.jpeg?auto=compress&cs=tinysrgb&w=400',
     color: '#8B5CF6',
     genre: 'Lo-Fi Hip Hop',
