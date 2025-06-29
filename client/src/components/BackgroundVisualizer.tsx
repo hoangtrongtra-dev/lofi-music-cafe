@@ -88,8 +88,8 @@ const BackgroundVisualizer: React.FC<BackgroundVisualizerProps> = ({ playerState
       ref={canvasRef}
       className="fixed inset-0 w-full h-full pointer-events-none z-0"
       style={{ 
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        opacity: 0.6
+        background: 'linear-gradient(135deg, #a5b4fc 0%, #c4b5fd 100%)',
+        opacity: 0.35
       }}
     />
   );

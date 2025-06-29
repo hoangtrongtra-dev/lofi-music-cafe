@@ -12,11 +12,20 @@ const Visualizer: React.FC<VisualizerProps> = ({ playerState, type = 'bars' }) =
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const dataArrayRef = useRef<Uint8Array | null>(null);
+  const particlesRef = useRef<Array<{
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    life: number;
+    maxLife: number;
+    size: number;
+  }>>([]);
+  const lastTrackIdRef = useRef<string | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
@@ -24,9 +33,14 @@ const Visualizer: React.FC<VisualizerProps> = ({ playerState, type = 'bars' }) =
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
     };
-
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
+
+    // Reset particles khi đổi track hoặc play lại
+    if (playerState.currentTrack?.id !== lastTrackIdRef.current || playerState.isPlaying) {
+      particlesRef.current = [];
+      lastTrackIdRef.current = playerState.currentTrack?.id || null;
+    }
 
     // Initialize audio context for real-time analysis
     if (!audioContextRef.current && playerState.isPlaying) {
@@ -40,40 +54,15 @@ const Visualizer: React.FC<VisualizerProps> = ({ playerState, type = 'bars' }) =
       }
     }
 
-    let particles: Array<{
-      x: number;
-      y: number;
-      vx: number;
-      vy: number;
-      life: number;
-      maxLife: number;
-      size: number;
-    }> = [];
-
     const animate = () => {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      if (playerState.isPlaying && playerState.currentTrack) {
-        const trackColor = playerState.currentTrack.color || '#8B5CF6';
-        const time = Date.now() * 0.001;
-
-        if (type === 'bars' && analyserRef.current && dataArrayRef.current) {
-          // Real-time frequency bars
-          analyserRef.current.getByteFrequencyData(dataArrayRef.current);
-          const barWidth = canvas.width / dataArrayRef.current.length;
-          
-          for (let i = 0; i < dataArrayRef.current.length; i++) {
-            const barHeight = (dataArrayRef.current[i] / 255) * canvas.height * 0.8;
-            const hue = (i / dataArrayRef.current.length) * 360;
-            
-            ctx.fillStyle = `hsla(${hue}, 70%, 60%, 0.8)`;
-            ctx.fillRect(i * barWidth, canvas.height - barHeight, barWidth - 1, barHeight);
-          }
-        } else if (type === 'particles') {
-          // Add new particles
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const trackColor = playerState.currentTrack?.color || '#8B5CF6';
+      const time = Date.now() * 0.001;
+      // Always animate, but only add new particles if playing
+      if (type === 'particles') {
+        if (playerState.isPlaying && playerState.currentTrack) {
           if (Math.random() < 0.3) {
-            particles.push({
+            particlesRef.current.push({
               x: Math.random() * canvas.width,
               y: canvas.height,
               vx: (Math.random() - 0.5) * 2,
@@ -83,42 +72,43 @@ const Visualizer: React.FC<VisualizerProps> = ({ playerState, type = 'bars' }) =
               size: Math.random() * 4 + 2
             });
           }
-
-          // Update and draw particles
-          particles = particles.filter(particle => {
-            particle.x += particle.vx;
-            particle.y += particle.vy;
-            particle.life++;
-            
-            const alpha = 1 - (particle.life / particle.maxLife);
-            ctx.fillStyle = `${trackColor}${Math.floor(alpha * 255).toString(16).padStart(2, '0')}`;
-            ctx.beginPath();
-            ctx.arc(particle.x, particle.y, particle.size * alpha, 0, Math.PI * 2);
-            ctx.fill();
-            
-            return particle.life < particle.maxLife;
-          });
-        } else {
-          // Waveform visualization
-          const amplitude = Math.sin(time * 2) * 0.3 + 0.7;
-          ctx.strokeStyle = trackColor;
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          
-          for (let x = 0; x < canvas.width; x += 2) {
-            const y = canvas.height / 2 + Math.sin((x + time * 100) * 0.01) * amplitude * 50;
-            if (x === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
-          }
-          ctx.stroke();
         }
+        // Update and draw particles (even if paused, so they fade out)
+        particlesRef.current = particlesRef.current.filter(particle => {
+          particle.x += particle.vx;
+          particle.y += particle.vy;
+          particle.life++;
+          const alpha = 1 - (particle.life / particle.maxLife);
+          ctx.fillStyle = `${trackColor}${Math.floor(alpha * 255).toString(16).padStart(2, '0')}`;
+          ctx.beginPath();
+          ctx.arc(particle.x, particle.y, particle.size * alpha, 0, Math.PI * 2);
+          ctx.fill();
+          return particle.life < particle.maxLife;
+        });
+      } else if (type === 'bars' && analyserRef.current && dataArrayRef.current && playerState.isPlaying) {
+        analyserRef.current.getByteFrequencyData(dataArrayRef.current);
+        const barWidth = canvas.width / dataArrayRef.current.length;
+        for (let i = 0; i < dataArrayRef.current.length; i++) {
+          const barHeight = (dataArrayRef.current[i] / 255) * canvas.height * 0.8;
+          const hue = (i / dataArrayRef.current.length) * 360;
+          ctx.fillStyle = `hsla(${hue}, 70%, 60%, 0.8)`;
+          ctx.fillRect(i * barWidth, canvas.height - barHeight, barWidth - 1, barHeight);
+        }
+      } else if (type === 'waveform') {
+        const amplitude = Math.sin(time * 2) * 0.3 + 0.7;
+        ctx.strokeStyle = trackColor;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        for (let x = 0; x < canvas.width; x += 2) {
+          const y = canvas.height / 2 + Math.sin((x + time * 100) * 0.01) * amplitude * 50;
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
       }
-
       animationFrameRef.current = requestAnimationFrame(animate);
     };
-
     animate();
-
     return () => {
       window.removeEventListener('resize', resizeCanvas);
       if (animationFrameRef.current) {

@@ -42,30 +42,85 @@ body {
   background: rgba(255, 255, 255, 0.5);
 }
 
-/* Custom Volume Slider */
-.slider {
-  background: linear-gradient(to right, #4f46e5 0%, #4f46e5 var(--value, 70%), #e5e7eb var(--value, 70%), #e5e7eb 100%);
+/* Custom Volume Slider - Full Fill & Modern Look */
+.slider-volume {
+  width: 100%;
+  height: 6px;
+  background: transparent;
 }
-
-.slider::-webkit-slider-thumb {
+.slider-volume:focus {
+  outline: none;
+}
+.slider-volume::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 6px;
+  background: linear-gradient(to right, #4f46e5 0%, #4f46e5 var(--value, 0%), #e5e7eb var(--value, 0%), #e5e7eb 100%);
+}
+.slider-volume::-webkit-slider-thumb {
   appearance: none;
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: #4f46e5;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  margin-top: -7px;
   cursor: pointer;
-  border: 2px solid white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: box-shadow 0.2s;
+}
+.slider-volume:focus::-webkit-slider-thumb {
+  box-shadow: 0 0 0 4px #a5b4fc66;
+}
+.slider-volume::-ms-fill-lower {
+  background: #4f46e5;
+  border-radius: 6px;
+}
+.slider-volume::-ms-fill-upper {
+  background: #e5e7eb;
+  border-radius: 6px;
+}
+.slider-volume::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #4f46e5;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  cursor: pointer;
+}
+.slider-volume::-moz-range-track {
+  height: 6px;
+  border-radius: 6px;
+  background: linear-gradient(to right, #4f46e5 0%, #4f46e5 var(--value, 0%), #e5e7eb var(--value, 0%), #e5e7eb 100%);
+}
+.slider-volume::-ms-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #4f46e5;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  cursor: pointer;
+}
+.slider-volume:focus::-ms-thumb {
+  box-shadow: 0 0 0 4px #a5b4fc66;
+}
+.slider-volume:focus::-ms-fill-lower {
+  background: #4f46e5;
+}
+.slider-volume:focus::-ms-fill-upper {
+  background: #e5e7eb;
+}
+.slider-volume::-ms-tooltip {
+  display: none;
+}
+.slider-volume:disabled {
+  opacity: 0.5;
 }
 
-.slider::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: #4f46e5;
-  cursor: pointer;
-  border: 2px solid white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+/* Firefox fix */
+.slider-volume {
+  accent-color: #4f46e5;
 }
 
 /* Animations */

@@ -46,10 +46,10 @@ const Equalizer: React.FC<EqualizerProps> = ({ onEQChange }) => {
       </button>
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-2 w-80 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl z-50">
+        <div className="absolute bottom-full right-0 mb-2 min-w-[18rem] max-w-xs md:max-w-sm bg-gradient-to-br from-indigo-900/90 to-indigo-700/90 border border-indigo-300/40 rounded-2xl shadow-2xl z-50 max-h-96 overflow-y-auto">
           <div className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-white font-semibold">Equalizer</h3>
+              <h3 className="text-indigo-100 font-bold text-lg">Equalizer</h3>
               <button
                 onClick={resetEQ}
                 className="p-1 rounded-full hover:bg-white/20 transition-colors"
@@ -60,13 +60,13 @@ const Equalizer: React.FC<EqualizerProps> = ({ onEQChange }) => {
 
             {/* Presets */}
             <div className="mb-6">
-              <p className="text-white/80 text-sm mb-2">Presets</p>
+              <p className="text-indigo-200 text-sm font-semibold mb-2">Presets</p>
               <div className="flex flex-wrap gap-2">
                 {Object.keys(presets).map((preset) => (
                   <button
                     key={preset}
                     onClick={() => applyPreset(preset as keyof typeof presets)}
-                    className="px-3 py-1 bg-white/10 hover:bg-white/20 text-white/80 rounded-full text-sm transition-colors capitalize"
+                    className="px-3 py-1 bg-indigo-900/30 hover:bg-indigo-700/40 text-indigo-100 rounded-full text-sm font-semibold transition-colors capitalize"
                   >
                     {preset}
                   </button>
@@ -78,7 +78,7 @@ const Equalizer: React.FC<EqualizerProps> = ({ onEQChange }) => {
             <div className="space-y-4">
               {frequencies.map((freq, index) => (
                 <div key={index} className="flex items-center gap-3">
-                  <div className="w-12 text-white/70 text-xs">
+                  <div className="w-12 text-indigo-200 text-xs">
                     {frequencyLabels[index]}
                   </div>
                   <div className="flex-1 relative">
@@ -89,15 +89,15 @@ const Equalizer: React.FC<EqualizerProps> = ({ onEQChange }) => {
                       step="1"
                       value={freq}
                       onChange={(e) => handleFrequencyChange(index, parseInt(e.target.value))}
-                      className="w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer slider"
+                      className="w-full h-2 bg-indigo-400/40 rounded-lg appearance-none cursor-pointer slider accent-indigo-500"
                     />
-                    <div className="flex justify-between text-xs text-white/50 mt-1">
+                    <div className="flex justify-between text-xs text-indigo-200 mt-1">
                       <span>-12</span>
                       <span>0</span>
                       <span>+12</span>
                     </div>
                   </div>
-                  <div className="w-8 text-white/70 text-xs text-right">
+                  <div className="w-8 text-indigo-200 text-xs text-right">
                     {freq > 0 ? '+' : ''}{freq}
                   </div>
                 </div>
