@@ -1,0 +1,330 @@
+# 🎵 LoFi Music Cafe - API Testing Guide
+# Server: http://localhost:5000/api
+
+## 🔐 AUTHENTICATION ENDPOINTS
+
+### 1. Login
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@lofi-cafe.com",
+  "password": "admin123"
+}
+
+### 2. Register
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "newuser",
+  "email": "newuser@example.com",
+  "password": "password123"
+}
+
+### 3. Get Current User
+GET http://localhost:5000/api/auth/me
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 4. Forgot Password
+POST http://localhost:5000/api/auth/forgot-password
+Content-Type: application/json
+
+{
+  "email": "admin@lofi-cafe.com"
+}
+
+### 5. Reset Password
+POST http://localhost:5000/api/auth/reset-password
+Content-Type: application/json
+
+{
+  "token": "reset_token_here",
+  "password": "newpassword123"
+}
+
+## 👥 ADMIN USERS MANAGEMENT
+
+### 6. Get All Users
+GET http://localhost:5000/api/admin/users?search=&page=1&limit=10
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 7. Create User
+POST http://localhost:5000/api/admin/users
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "username": "newadmin",
+  "email": "newadmin@example.com",
+  "password": "admin123",
+  "role": "admin"
+}
+
+### 8. Update User
+PUT http://localhost:5000/api/admin/users/user-001
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "username": "updateduser",
+  "email": "updated@example.com",
+  "role": "moderator",
+  "status": "active"
+}
+
+### 9. Delete User
+DELETE http://localhost:5000/api/admin/users/user-001
+Authorization: Bearer YOUR_TOKEN_HERE
+
+## 🎵 ADMIN TRACKS MANAGEMENT
+
+### 10. Get All Tracks
+GET http://localhost:5000/api/admin/tracks?search=&page=1&limit=10
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 11. Create Track
+POST http://localhost:5000/api/admin/tracks
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "title": "New Track",
+  "artist": "New Artist",
+  "duration": 180,
+  "genre": "Lo-Fi",
+  "mood": "chill",
+  "isActive": true
+}
+
+### 12. Update Track
+PUT http://localhost:5000/api/admin/tracks/track-001
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "title": "Updated Track",
+  "artist": "Updated Artist",
+  "duration": 200,
+  "genre": "Jazz",
+  "mood": "relaxed"
+}
+
+### 13. Delete Track
+DELETE http://localhost:5000/api/admin/tracks/track-001
+Authorization: Bearer YOUR_TOKEN_HERE
+
+## 📋 ADMIN PLAYLISTS MANAGEMENT
+
+### 14. Get All Playlists
+GET http://localhost:5000/api/admin/playlists?search=&page=1&limit=10
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 15. Create Playlist
+POST http://localhost:5000/api/admin/playlists
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "name": "New Playlist",
+  "tracks": 5,
+  "creator": "admin",
+  "status": "public"
+}
+
+### 16. Update Playlist
+PUT http://localhost:5000/api/admin/playlists/playlist-001
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "name": "Updated Playlist",
+  "tracks": 10,
+  "creator": "admin",
+  "status": "private"
+}
+
+### 17. Delete Playlist
+DELETE http://localhost:5000/api/admin/playlists/playlist-001
+Authorization: Bearer YOUR_TOKEN_HERE
+
+## 🚨 ADMIN REPORTS MANAGEMENT
+
+### 18. Get All Reports
+GET http://localhost:5000/api/admin/reports?type=all&status=all&search=&page=1&limit=10
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 19. Create Report
+POST http://localhost:5000/api/admin/reports
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "type": "Copyright",
+  "content": "This track violates copyright",
+  "user": "user-001",
+  "status": "pending"
+}
+
+### 20. Update Report
+PUT http://localhost:5000/api/admin/reports/report-001
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "type": "Abuse",
+  "content": "Updated report content",
+  "user": "user-002",
+  "status": "resolved"
+}
+
+### 21. Delete Report
+DELETE http://localhost:5000/api/admin/reports/report-001
+Authorization: Bearer YOUR_TOKEN_HERE
+
+## 📊 ANALYTICS & SETTINGS
+
+### 22. Get Analytics
+GET http://localhost:5000/api/admin/analytics
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 23. Get Settings
+GET http://localhost:5000/api/admin/settings
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 24. Update Settings
+PUT http://localhost:5000/api/admin/settings
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "siteName": "LoFi Music Cafe",
+  "apiKey": "sk-xxxxxx",
+  "allowRegister": true
+}
+
+## ☁️ CLOUDINARY MANAGEMENT
+
+### 25. Upload File
+POST http://localhost:5000/api/admin/upload
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "file": "base64_encoded_file_data",
+  "type": "image"
+}
+
+### 26. Get Cloudinary Assets
+GET http://localhost:5000/api/admin/cloudinary/assets?type=all
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 27. Save Cloudinary Asset
+POST http://localhost:5000/api/admin/cloudinary/asset
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "public_id": "lofi-music-cafe/image123",
+  "url": "https://res.cloudinary.com/your-cloud/image/upload/v1/lofi-music-cafe/image123.jpg",
+  "resource_type": "image",
+  "format": "jpg",
+  "bytes": 1024000,
+  "folder": "lofi-music-cafe"
+}
+
+### 28. Delete Cloudinary Asset
+DELETE http://localhost:5000/api/admin/cloudinary/asset/lofi-music-cafe/image123
+Authorization: Bearer YOUR_TOKEN_HERE
+
+## 🔑 TEST CREDENTIALS
+
+### Admin Account
+- Email: admin@lofi-cafe.com
+- Password: admin123
+- Role: admin
+
+### User Accounts
+- Email: user@lofi-cafe.com
+- Password: user123
+- Role: user
+
+- Email: chill@lofi-cafe.com
+- Password: chill123
+- Role: user
+
+- Email: study@lofi-cafe.com
+- Password: study123
+- Role: user (suspended)
+
+## 📝 HOW TO USE IN POSTMAN
+
+### Step 1: Setup Collection
+1. Create new collection in Postman
+2. Name it "LoFi Music Cafe API"
+3. Set base URL: http://localhost:5000/api
+
+### Step 2: Get Authentication Token
+1. Run the Login request first
+2. Copy the token from response
+3. Set as environment variable: `token`
+
+### Step 3: Test Other Endpoints
+1. Use `{{token}}` in Authorization header
+2. Format: `Bearer {{token}}`
+3. Test all CRUD operations
+
+### Step 4: Environment Variables
+Create environment with these variables:
+- `base_url`: http://localhost:5000/api
+- `token`: (from login response)
+- `admin_email`: admin@lofi-cafe.com
+- `admin_password`: admin123
+
+## 🎯 QUICK TEST SEQUENCE
+
+1. **Login** → Get token
+2. **Get Analytics** → Verify admin access
+3. **Get Users** → Check data loading
+4. **Create User** → Test POST
+5. **Update User** → Test PUT
+6. **Delete User** → Test DELETE
+7. **Get Settings** → Test settings access
+
+## ⚠️ IMPORTANT NOTES
+
+- All admin endpoints require admin role
+- Token expires in 24 hours
+- Database is seeded with sample data
+- Server must be running on port 5000
+- CORS is enabled for localhost
+
+## 🚀 RESPONSE FORMATS
+
+### Success Response
+```json
+{
+  "message": "Operation successful",
+  "data": {...}
+}
+```
+
+### Error Response
+```json
+{
+  "error": "Error message"
+}
+```
+
+### Authentication Response
+```json
+{
+  "token": "jwt_token_here",
+  "user": {
+    "id": "user_id",
+    "username": "username",
+    "email": "email",
+    "role": "role"
+  }
+}
+```

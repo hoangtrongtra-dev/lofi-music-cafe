@@ -10,10 +10,15 @@ export interface Track {
   genre?: string;
   releaseDate?: string;
   isFavorite?: boolean;
+  isActive?: boolean; // For content management - whether track is available for playback
   mood?: 'energetic' | 'focused' | 'chill' | 'romantic' | 'rainy' | 'sunny' | 'cloudy' | 'night';
   energy?: number; // 0-1
   danceability?: number; // 0-1
   valence?: number; // 0-1 (musical positivity)
+  playCount?: number;
+  likeCount?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface Playlist {
@@ -26,6 +31,9 @@ export interface Playlist {
   isPublic: boolean;
   mood?: string;
   collaborative?: boolean;
+  createdBy?: string;
+  followers?: number;
+  totalDuration?: number;
 }
 
 export interface Artist {
@@ -38,6 +46,14 @@ export interface Artist {
   verified: boolean;
   monthlyListeners?: number;
   genres?: string[];
+  socialLinks?: {
+    instagram?: string;
+    twitter?: string;
+    youtube?: string;
+    soundcloud?: string;
+  };
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface PlayerState {

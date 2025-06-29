@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { tracks } from './data/tracks';
 import { Track } from './types/Track';
 import { useAudioPlayer } from './hooks/useAudioPlayer';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Header from './components/Header';
 import TrackList from './components/TrackList';
 import EnhancedAudioPlayer from './components/EnhancedAudioPlayer';
@@ -13,16 +14,22 @@ import AboutPage from './components/AboutPage';
 import FavoritesPage from './components/FavoritesPage';
 import SearchPage from './components/SearchPage';
 import AuthPage from './components/AuthPage';
+import SimpleAuthTest from './components/SimpleAuthTest';
 import Footer from './components/Footer';
 import SocialFeatures from './components/SocialFeatures';
 import WeatherBasedPlaylists from './components/WeatherBasedPlaylists';
 import PersonalDashboard from './components/PersonalDashboard';
+import AdminDashboard from './components/admin/AdminDashboard';
+import AdminTestToolsDrawer from './components/admin/AdminTestToolsDrawer';
 
-function App() {
+function AppContent() {
   const [currentPage, setCurrentPage] = useState('home');
   const [isLoading, setIsLoading] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
+  const [showAdminDashboard, setShowAdminDashboard] = useState(false);
+
+  const { user, isAuthenticated, isAdmin } = useAuth();
 
   const {
     playerState,
@@ -195,6 +202,14 @@ function App() {
                   >
                     View Stats
                   </button>
+                  {isAdmin() && (
+                    <button
+                      onClick={() => setShowAdminDashboard(true)}
+                      className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-full text-sm transition-colors"
+                    >
+                      Admin Panel
+                    </button>
+                  )}
                   <span className="text-white/70">
                     {tracks.length} tracks
                   </span>
@@ -245,6 +260,8 @@ function App() {
           currentPage={currentPage} 
           onPageChange={setCurrentPage}
           onAuthClick={() => setShowAuth(true)}
+          user={user}
+          isAuthenticated={isAuthenticated}
         />
         {renderPage()}
         <Footer />
@@ -276,7 +293,21 @@ function App() {
         isOpen={showDashboard} 
         onClose={() => setShowDashboard(false)} 
       />
+
+      {showAdminDashboard && (
+        <AdminDashboard onClose={() => setShowAdminDashboard(false)} />
+      )}
+
+      <AdminTestToolsDrawer />
     </div>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 
